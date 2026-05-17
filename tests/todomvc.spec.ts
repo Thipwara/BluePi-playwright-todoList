@@ -14,9 +14,7 @@ test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
   // TC-01: เพิ่ม 10 todo items และตรวจสอบ counter = 10
   // ============================================================
   test('TC-01: Add 10 todo items and verify counter shows 10', async () => {
-    for (const item of TODO_ITEMS) {
-      await todoPage.addTodo(item);
-    }
+    await todoPage.addDefaultTodos(TODO_ITEMS);
 
     await expect(todoPage.todoListItems).toHaveCount(10);
     const count = await todoPage.getItemsLeftCount();
@@ -31,9 +29,7 @@ test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
   // TC-02: ลบ list ที่ 10 และตรวจสอบ counter = 9
   // ============================================================
   test('TC-02: Delete item #10 and verify counter drops to 9', async () => {
-    for (const item of TODO_ITEMS) {
-      await todoPage.addTodo(item);
-    }
+    await todoPage.addDefaultTodos(TODO_ITEMS);
     await expect(todoPage.todoListItems).toHaveCount(10);
 
     // ลบรายการที่ 10 (index 9)
@@ -53,9 +49,7 @@ test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
   // TC-03: Tick item #1 และ #2, ตรวจสอบ completed tab, counter = 7, clear completed button
   // ============================================================
   test('TC-03: Check items #1 and #2 as completed, verify completed tab and counter = 7', async () => {
-    for (const item of TODO_ITEMS) {
-      await todoPage.addTodo(item);
-    }
+    await todoPage.addDefaultTodos(TODO_ITEMS);
     await expect(todoPage.todoListItems).toHaveCount(10);
 
     // ลบรายการสุดท้ายออกไปก่อนเพื่อให้ counter กลายเป็น 7
@@ -81,9 +75,7 @@ test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
   // TC-04: ลบ item #1 ในหน้า Completed โดย hover แล้วกด delete
   // ============================================================
   test('TC-04: Delete item #1 from Completed tab by hovering at end of list', async () => {
-    for (const item of TODO_ITEMS) {
-      await todoPage.addTodo(item);
-    }
+    await todoPage.addDefaultTodos(TODO_ITEMS);
     
     await todoPage.toggleTodoByIndex(0);
     await todoPage.toggleTodoByIndex(1);
@@ -101,9 +93,7 @@ test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
   // TC-05: ตรวจสอบว่า list ที่ไม่ถูก tick จะอยู่ในหน้า Active
   // ============================================================
   test('TC-05: Unchecked items appear in Active tab', async () => {
-    for (const item of TODO_ITEMS) {
-      await todoPage.addTodo(item);
-    }
+    await todoPage.addDefaultTodos(TODO_ITEMS);
 
     await todoPage.toggleTodoByIndex(0);
     await todoPage.toggleTodoByIndex(1);
@@ -125,9 +115,7 @@ test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
   // TC-06: ลบ item ในหน้า Active โดย hover แล้วกด delete
   // ============================================================
   test('TC-06: Delete an item from Active tab by hovering at end of list', async () => {
-    for (const item of TODO_ITEMS) {
-      await todoPage.addTodo(item);
-    }
+    await todoPage.addDefaultTodos(TODO_ITEMS);
 
     await todoPage.toggleTodoByIndex(0);
     await todoPage.toggleTodoByIndex(1);
@@ -146,9 +134,7 @@ test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
   // TC-07: Clear completed ลบเฉพาะ completed items, ไม่กระทบ active/all
   // ============================================================
   test('TC-07: Clear completed removes only completed items from all tabs', async () => {
-    for (const item of TODO_ITEMS) {
-      await todoPage.addTodo(item);
-    }
+    await todoPage.addDefaultTodos(TODO_ITEMS);
 
     await todoPage.toggleTodoByIndex(0);
     await todoPage.toggleTodoByIndex(1);

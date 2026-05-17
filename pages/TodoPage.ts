@@ -34,7 +34,13 @@ export class TodoPage {
     await this.newTodoInput.click();
     await this.newTodoInput.fill(text);
     await this.newTodoInput.press('Enter');
-    await this.page.waitForTimeout(200);
+    await expect(this.todoListItems.filter({ hasText: text }).first()).toBeVisible();
+  }
+
+  async addDefaultTodos(items: string[]) {
+    for (const item of items) {
+      await this.addTodo(item);
+    }
   }
 
   async getItemsLeftCount(): Promise<number> {
