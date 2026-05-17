@@ -11,6 +11,7 @@ export class TodoPage {
   readonly allTab: Locator;
   readonly activeTab: Locator;
   readonly completedTab: Locator;
+  readonly markAllAsComplete: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -22,6 +23,7 @@ export class TodoPage {
     this.allTab = page.getByRole('link', { name: 'All' });
     this.activeTab = page.getByRole('link', { name: 'Active' });
     this.completedTab = page.getByRole('link', { name: 'Completed' });
+    this.markAllAsComplete = page.getByText('Mark all as complete');
   }
 
   async navigate() {
@@ -55,7 +57,7 @@ export class TodoPage {
   async deleteTodoByIndex(index: number) {
     const item = this.getTodoItem(index);
     await item.hover();
-    const deleteBtn = item.locator('.destroy');
+    const deleteBtn = item.getByRole('button', { name: 'Delete' });
     await expect(deleteBtn).toBeVisible();
     await deleteBtn.click();
   }
@@ -65,9 +67,20 @@ export class TodoPage {
     await item.locator('.toggle').click();
   }
 
+  async toggleTodoByText(text: string) {
+    const toggleBtn = this.page.getByRole('listitem').filter({ hasText: text }).getByLabel('Toggle Todo');
+    await expect(toggleBtn).toBeVisible();
+    await toggleBtn.click();
+  }
+
   async clickClearCompleted() {
     await expect(this.clearCompletedButton).toBeVisible();
     await this.clearCompletedButton.click();
+  }
+
+  async clickMarkAllAsComplete() {
+    await expect(this.markAllAsComplete).toBeVisible();
+    await this.markAllAsComplete.click();
   }
 
   async navigateToAllTab() {

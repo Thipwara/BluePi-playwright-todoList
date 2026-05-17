@@ -1,6 +1,7 @@
 # TodoMVC - Playwright Automation
 
-This project contains automated End-to-End (E2E) tests for the [TodoMVC Playwright Demo](https://demo.playwright.dev/todomvc/#/) using **Playwright** and **TypeScript**. The tests are designed using the **Page Object Model (POM)** design pattern to ensure maintainability, reusability, and readability.
+This project contains automated tests for the [TodoMVC Playwright Demo](https://demo.playwright.dev/todomvc/#/) using **Playwright** and **TypeScript**. The tests are designed using the **Page Object Model (POM)** design pattern to ensure maintainability, reusability, and readability.
+
 
 ## 📂 Project Structure
 
@@ -85,14 +86,14 @@ The test suite contains **7 automated test cases** that execute independently to
 3. **TC-03: Complete items #1 and #2**
    - Add default items.
    - Mark items #1 and #2 as completed.
-   - Verify the counter updates to "7 items left".
+   - Verify the counter updates to "8 items left".
    - Verify the "Clear completed" button becomes visible.
    - Verify the completed items appear inside the "Completed" tab.
 
 4. **TC-04: Delete item from the 'Completed' tab**
    - Mark items as completed and navigate to the "Completed" tab.
    - Hover over item #1 and delete it via the destroy button.
-   - Verify the item is successfully removed from the completed list.
+   - Verify the item is successfully removed from the completed list even already marked as completed.
 
 5. **TC-05: Verify unchecked items in the 'Active' tab**
    - Mark specific items as completed.
@@ -109,4 +110,37 @@ The test suite contains **7 automated test cases** that execute independently to
    - Mark items as completed.
    - Click the "Clear completed" button.
    - Verify that checked items are permanently removed from the "Completed", "Active", and "All" tabs.
-   - Verify that unchecked items remain completely intact across the "Active" and "All" tabs.
+   - Verify that the unchecked items remain completely in the "Active" and "All" tabs.
+
+8. **TC-08: When clear completed from another tab, completed items should be removed from all tabs not only completed tabs**
+   - Mark items as completed.
+   - Click the "Clear completed" button on the all tabs.
+   - Verify that the checked items are permanently removed from the "Completed" tab.
+   - Verify that the unchecked items remain completely in the "Active" and "All" tabs.
+
+9. **TC-09: Mark all as complete**
+   - Mark items as completed.
+   - Click the "Mark all as complete" button.
+   - Verify that all items are marked as completed.
+   - Verify that the counter updates to "0 items left".
+   - Verify that the "Clear completed" button becomes visible.
+   - Verify that all items appear in the "Completed" tab.
+   - Verify that all items appear in the "Active" tab.
+   - Verify that all items appear in the "All" tab.
+
+10. **TC-10: Mark all as complete and then click mark all as complete again**
+    - Mark items as completed.
+    - Click the "Mark all as complete" button.
+    - Verify that all items are marked as completed.
+    - Verify that the counter updates to "0 items left".
+    - Verify that the "Clear completed" button becomes visible.
+    - Verify that all items appear in the "Completed" tab.
+    - Verify that all items appear in the "Active" tab.
+    - Verify that all items appear in the "All" tab.
+    - Click the "Mark all as complete" button again.
+    - Verify that all items are marked as active.
+    - Verify that the counter updates to "10 items left".
+    - Verify that the "Clear completed" button becomes visible.
+    - Verify that all items appear in the "Completed" tab.
+    - Verify that all items appear in the "Active" tab.
+    - Verify that all items appear in the "All" tab.
