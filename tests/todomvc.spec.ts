@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { TodoPage } from '../pages/TodoPage';
 import { TODO_ITEMS } from '../data/todoData';
 
-test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
+test.describe('TodoList - Playwright Automation', () => {
   let todoPage: TodoPage;
 
   test.beforeEach(async ({ page }) => {
@@ -10,9 +10,7 @@ test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
     await todoPage.navigate();
   });
 
-  // ============================================================
-  // TC-01: เพิ่ม 10 todo items และตรวจสอบ counter = 10
-  // ============================================================
+
   test('TC-01: Add 10 todo items and verify counter shows 10', async () => {
     await todoPage.addDefaultTodos(TODO_ITEMS);
 
@@ -32,7 +30,6 @@ test.describe('TodoMVC - Playwright Automation (POM structure)', () => {
     await todoPage.addDefaultTodos(TODO_ITEMS);
     await expect(todoPage.todoListItems).toHaveCount(10);
 
-    // ลบรายการที่ 10 (index 9)
     await todoPage.deleteTodoByIndex(9);
 
     await expect(todoPage.todoListItems).toHaveCount(9);

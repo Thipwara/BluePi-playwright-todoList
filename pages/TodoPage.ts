@@ -15,13 +15,13 @@ export class TodoPage {
   constructor(page: Page) {
     this.page = page;
     this.helper = new CommonHelper(page);
-    this.newTodoInput = page.locator('.new-todo');
-    this.todoListItems = page.locator('.todo-list li');
-    this.todoCount = page.locator('.todo-count strong');
-    this.clearCompletedButton = page.locator('.clear-completed');
-    this.allTab = page.locator('a[href="#/"]');
-    this.activeTab = page.locator('a[href="#/active"]');
-    this.completedTab = page.locator('a[href="#/completed"]');
+    this.newTodoInput = page.getByRole('textbox', { name: 'What needs to be done?' });
+    this.todoListItems = page.getByTestId('todo-item');
+    this.todoCount = page.getByTestId('todo-count');
+    this.clearCompletedButton = page.getByRole('button', { name: 'Clear completed' })
+    this.allTab = page.getByRole('link', { name: 'All' });
+    this.activeTab = page.getByRole('link', { name: 'Active' });
+    this.completedTab = page.getByRole('link', { name: 'Completed' });
   }
 
   async navigate() {
