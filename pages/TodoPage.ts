@@ -11,17 +11,19 @@ export class TodoPage {
   readonly allTab: Locator;
   readonly activeTab: Locator;
   readonly completedTab: Locator;
+  readonly markAllAsComplete: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.helper = new CommonHelper(page);
-    this.newTodoInput = page.locator('.new-todo');
-    this.todoListItems = page.locator('.todo-list li');
-    this.todoCount = page.locator('.todo-count strong');
-    this.clearCompletedButton = page.locator('.clear-completed');
-    this.allTab = page.locator('a[href="#/"]');
-    this.activeTab = page.locator('a[href="#/active"]');
-    this.completedTab = page.locator('a[href="#/completed"]');
+    this.newTodoInput = page.getByRole('textbox', { name: 'What needs to be done?' });
+    this.todoListItems = page.getByTestId('todo-item');
+    this.todoCount = page.getByTestId('todo-count');
+    this.clearCompletedButton = page.getByRole('button', { name: 'Clear completed' })
+    this.allTab = page.getByRole('link', { name: 'All' });
+    this.activeTab = page.getByRole('link', { name: 'Active' });
+    this.completedTab = page.getByRole('link', { name: 'Completed' });
+    this.markAllAsComplete = page.getByText('Mark all as complete');
   }
 
   async navigate() {
@@ -34,7 +36,13 @@ export class TodoPage {
     await this.newTodoInput.click();
     await this.newTodoInput.fill(text);
     await this.newTodoInput.press('Enter');
-    await this.page.waitForTimeout(200);
+    await expect(this.todoListItems.filter({ hasText: text }).first()).toBeVisible();
+  }
+
+  async addDefaultTodos(items: string[]) {
+    for (const item of items) {
+      await this.addTodo(item);
+    }
   }
 
   async getItemsLeftCount(): Promise<number> {
@@ -49,7 +57,7 @@ export class TodoPage {
   async deleteTodoByIndex(index: number) {
     const item = this.getTodoItem(index);
     await item.hover();
-    const deleteBtn = item.locator('.destroy');
+    const deleteBtn = item.getByRole('button', { name: 'Delete' });
     await expect(deleteBtn).toBeVisible();
     await deleteBtn.click();
   }
@@ -59,9 +67,20 @@ export class TodoPage {
     await item.locator('.toggle').click();
   }
 
+  async toggleTodoByText(text: string) {
+    const toggleBtn = this.page.getByRole('listitem').filter({ hasText: text }).getByLabel('Toggle Todo');
+    await expect(toggleBtn).toBeVisible();
+    await toggleBtn.click();
+  }
+
   async clickClearCompleted() {
     await expect(this.clearCompletedButton).toBeVisible();
     await this.clearCompletedButton.click();
+  }
+
+  async clickMarkAllAsComplete() {
+    await expect(this.markAllAsComplete).toBeVisible();
+    await this.markAllAsComplete.click();
   }
 
   async navigateToAllTab() {
