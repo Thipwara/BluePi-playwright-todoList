@@ -42,8 +42,8 @@ test.describe('TodoList - Playwright Automation', () => {
   test('TC-03: Check items #1 and #2 as completed, verify completed tab and counter = 8', async () => {
     await expect(todoPage.todoListItems).toHaveCount(10);
 
-    await todoPage.toggleTodoByIndex(0);
-    await todoPage.toggleTodoByIndex(1);
+    await todoPage.toggleTodoByText(TODO_ITEMS[0]);
+    await todoPage.toggleTodoByText(TODO_ITEMS[1]);
 
     const count = await todoPage.getItemsLeftCount();
     expect(count).toBe(8);
@@ -59,8 +59,8 @@ test.describe('TodoList - Playwright Automation', () => {
 
   test('TC-04: Delete item from Completed tab by hovering at end of list', async () => {
 
-    await todoPage.toggleTodoByIndex(0);
-    await todoPage.toggleTodoByIndex(1);
+    await todoPage.toggleTodoByText(TODO_ITEMS[0]);
+    await todoPage.toggleTodoByText(TODO_ITEMS[1]);
 
     await todoPage.navigateToCompletedTab();
     await expect(todoPage.todoListItems).toHaveCount(2);
@@ -73,18 +73,17 @@ test.describe('TodoList - Playwright Automation', () => {
 
   test('TC-05: Unchecked items appear in Active tab', async () => {
 
-    await todoPage.toggleTodoByIndex(0);
-    await todoPage.toggleTodoByIndex(1);
+    await todoPage.toggleTodoByText(TODO_ITEMS[0]);
+    await todoPage.toggleTodoByText(TODO_ITEMS[1]);
     await todoPage.toggleTodoByText(TODO_ITEMS[2]);
 
     await todoPage.navigateToActiveTab();
     await expect(todoPage.todoListItems).toHaveCount(7);
 
-    for (let i = 0; i < 7; i++) {
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[0]);
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[1]);
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[2]);
-    }
+    const count = await todoPage.getItemsLeftCount();
+    expect(count).toBe(7);
+
+    await todoPage.helper.verifyTextsNotInList(todoPage.todoListItems, [TODO_ITEMS[0], TODO_ITEMS[1], TODO_ITEMS[2]]);
 
     for (let i = 3; i < TODO_ITEMS.length; i++) {
       await expect(todoPage.todoListItems.filter({ hasText: TODO_ITEMS[i] })).toBeVisible();
@@ -124,10 +123,7 @@ test.describe('TodoList - Playwright Automation', () => {
     await todoPage.navigateToActiveTab();
     await expect(todoPage.todoListItems).toHaveCount(8);
 
-    for (let i = 0; i < 8; i++) {
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[0]);
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[1]);
-    }
+    await todoPage.helper.verifyTextsNotInList(todoPage.todoListItems, [TODO_ITEMS[0], TODO_ITEMS[1]]);
 
     await todoPage.navigateToAllTab();
     await expect(todoPage.todoListItems).toHaveCount(8);
@@ -136,16 +132,13 @@ test.describe('TodoList - Playwright Automation', () => {
       await expect(todoPage.todoListItems.filter({ hasText: TODO_ITEMS[i] })).toBeVisible();
     }
 
-    for (let i = 0; i < 8; i++) {
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[0]);
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[1]);
-    }
+    await todoPage.helper.verifyTextsNotInList(todoPage.todoListItems, [TODO_ITEMS[0], TODO_ITEMS[1]]);
   });
 
    test('TC-08: When clear completed from another tab, completed items should be removed from all tabs not only completed tabs', async () => {
-    await todoPage.toggleTodoByIndex(3);
-    await todoPage.toggleTodoByIndex(4);
-    await todoPage.toggleTodoByIndex(5);
+    await todoPage.toggleTodoByText(TODO_ITEMS[3]);
+    await todoPage.toggleTodoByText(TODO_ITEMS[4]);
+    await todoPage.toggleTodoByText(TODO_ITEMS[5]);
 
     await expect(todoPage.clearCompletedButton).toBeVisible();
     const count = await todoPage.getItemsLeftCount();
@@ -157,11 +150,7 @@ test.describe('TodoList - Playwright Automation', () => {
     await todoPage.navigateToActiveTab();
     await expect(todoPage.todoListItems).toHaveCount(7);
 
-    for (let i = 0; i < 7; i++) {
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[3]);
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[4]);
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[5]);
-    }
+    await todoPage.helper.verifyTextsNotInList(todoPage.todoListItems, [TODO_ITEMS[3], TODO_ITEMS[4], TODO_ITEMS[5]]);
 
     await todoPage.navigateToCompletedTab();
     await expect(todoPage.todoListItems).toHaveCount(0);
@@ -169,11 +158,7 @@ test.describe('TodoList - Playwright Automation', () => {
     await todoPage.navigateToActiveTab();
     await expect(todoPage.todoListItems).toHaveCount(7);
 
-    for (let i = 0; i < 7; i++) {
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[3]);
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[4]);
-      await expect(todoPage.getTodoItem(i)).not.toContainText(TODO_ITEMS[5]);
-    }
+    await todoPage.helper.verifyTextsNotInList(todoPage.todoListItems, [TODO_ITEMS[3], TODO_ITEMS[4], TODO_ITEMS[5]]);
   });
 
   test('TC-09: Mark all as complete', async () => {
