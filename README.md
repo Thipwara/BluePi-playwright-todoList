@@ -40,10 +40,12 @@ bluepi-playwright-todomvc/
    ```bash
    npx playwright install chromium
    ```
+4. **Install Playwright Test for VSCode extension:**
+
 
 ## 🚀 Running Tests
 
-You can execute the tests using the predefined NPM scripts or NPX commands:
+You can execute the tests using the predefined NPM scripts or NPX commands: (make sure already on main branch)
 
 - **Run all tests (Headless Mode):**
   ```bash
